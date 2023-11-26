@@ -6,45 +6,52 @@ import { quizData } from '../../assets/quizData';
 import './quiz.scss';
 
 const Quiz = () => {
-  const [currentQuiz, setCurrentQuiz] = useState(0);
-  const [score, setScore] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState(
-    Array(quizData.length).fill(null)
-  );
-  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [quizState, setQuizState] = useState({
+    currentQuiz: 0,
+    score: 0,
+    selectedAnswers: Array(quizData.length).fill(null),
+    quizCompleted: false,
+  });
 
   const handleAnswerSubmit = (selectedAnswer) => {
-    const updatedAnswers = [...selectedAnswers];
-    updatedAnswers[currentQuiz] = selectedAnswer;
-    setSelectedAnswers(updatedAnswers);
+    setQuizState((prevState) => {
+      const updatedAnswers = [...prevState.selectedAnswers];
+      updatedAnswers[prevState.currentQuiz] = selectedAnswer;
 
-    if (selectedAnswer === quizData[currentQuiz].correct) {
-      setScore(score + 1);
-    }
-
-    if (currentQuiz + 1 < quizData.length) {
-      setCurrentQuiz(currentQuiz + 1);
-    } else {
-      setQuizCompleted(true);
-    }
+      return {
+        ...prevState,
+        selectedAnswers: updatedAnswers,
+        score:
+          selectedAnswer === quizData[prevState.currentQuiz].correct
+            ? prevState.score + 1
+            : prevState.score,
+        currentQuiz:
+          prevState.currentQuiz + 1 < quizData.length
+            ? prevState.currentQuiz + 1
+            : prevState.currentQuiz,
+        quizCompleted: prevState.currentQuiz + 1 === quizData.length,
+      };
+    });
   };
 
   const handleReload = () => {
-    setCurrentQuiz(0);
-    setScore(0);
-    setSelectedAnswers(Array(quizData.length).fill(null));
-    setQuizCompleted(false);
+    setQuizState({
+      currentQuiz: 0,
+      score: 0,
+      selectedAnswers: Array(quizData.length).fill(null),
+      quizCompleted: false,
+    });
   };
 
-  const currentQuizData = quizData[currentQuiz];
+  const currentQuizData = quizData[quizState.currentQuiz];
 
   return (
     <div className='quiz-container' id='quiz' data-testid='quiz'>
-      {quizCompleted ? (
+      {quizState.quizCompleted ? (
         <div className='quiz-result'>
           <h3>You answered correctly on:</h3>
           <h4>
-            {score} / {quizData.length} questions{' '}
+            {quizState.score} out of {quizData.length} questions{' '}
           </h4>
           <h3 className='special'>Details:</h3>
           <ul>
@@ -53,12 +60,12 @@ const Quiz = () => {
                 Question {index + 1}:{' '}
                 <span
                   className={`${
-                    selectedAnswers[index] === question.correct
+                    quizState.selectedAnswers[index] === question.correct
                       ? 'right'
                       : 'wrong'
                   }`}
                 >
-                  {selectedAnswers[index] === question.correct
+                  {quizState.selectedAnswers[index] === question.correct
                     ? 'Correct'
                     : 'Wrong'}
                 </span>
@@ -72,7 +79,7 @@ const Quiz = () => {
           <QuizHeader question={currentQuizData.question} />
           <QuizQuestion
             questionData={currentQuizData}
-            selectedAnswer={selectedAnswers[currentQuiz]}
+            selectedAnswer={quizState.selectedAnswers[quizState.currentQuiz]}
             onAnswerSubmit={handleAnswerSubmit}
           />
         </>

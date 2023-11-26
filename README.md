@@ -9,36 +9,46 @@ It's a basic create-react-app project and I've used basic jsx and sass for styli
 
 All tests can be found in the /src/__test__ dir
 
+# Components and Features to include 💾
+
+Components:     
+
+    - Header 
+    Header with a title
+
+  - Quiz component
+  Handles state for currentQuiz, selectedAnswers and score, its is the wrapper for 
+  
+  - QuizHeader 
+  Takes in the current quiz (question)
+  
+  - QuizQuestions 
+  passes the data to the quiz choice
+
+  - QuizChoice
+    This is where the inputs are for the radio inputs
+    ex, li > with input and label, takes in props from data
+
 # Components and Features to include
 - Header (with a title)
-- Quiz component, handles state for currentQuiz, selectedAnswers and score, its is the wrapper for QuizHeader & QuizQuestions, passes the data
+
     - QuizHeader component is where the question is shown as title, passed in as props from data
     - QuizQuestion, handles submit and is a list wrapper for QuizChoices rendering the choices, passed in as props from data
 - QuizChoice component should contain a choice ex, li with input and label, takes in props from data
 
 // not ready yet...
 
-## Available Scripts
-
-In the project directory, you can run:
+### Getting started
 
 ```sh
 npm run start
 ```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### How to run test 
 
 ```sh
 npm run test
 ```
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 
 There should be data for this project and I'll give it here to make it easier
 ```
@@ -85,3 +95,4 @@ There should be data for this project and I'll give it here to make it easier
   },
 ]
 ```
+
